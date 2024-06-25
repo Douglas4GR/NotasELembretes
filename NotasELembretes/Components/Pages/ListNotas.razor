@@ -1,0 +1,30 @@
+﻿<!-- ListNotas.razor -->
+@page "/notas"
+
+@using NotasELembretes.Models
+@using NotasELembretes.Services
+
+<h1>Suas Notas</h1>
+
+<!-- Listagem de notas aqui -->
+
+<AddNota OnNotaAdicionada="AdicionarNota" />
+
+@code {
+    // Injetar serviço necessário
+    [Inject]
+    private INotaService NotaService { get; set; }
+
+    private async Task AdicionarNota(Nota novaNota)
+    {
+        try
+        {
+            await NotaService.CreateNotaAsync(novaNota);
+            // Atualizar a lista de notas após adicionar nova nota, se necessário
+        }
+        catch (Exception ex)
+        {
+            // Tratar erros se necessário
+        }
+    }
+}

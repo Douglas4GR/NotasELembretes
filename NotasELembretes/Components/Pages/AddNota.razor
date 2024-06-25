@@ -1,0 +1,35 @@
+﻿<!-- AddNota.razor -->
+@using NotasELembretes.Models
+@using Microsoft.AspNetCore.Components.Forms
+
+<div class="row">
+    <div class="col-md-6">
+        <EditForm Model="@novaNota" OnValidSubmit="SalvarNota" FormName="formAddNota">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="form-group">
+                <label>Descrição</label>
+                <InputText @bind-Value="novaNota.Descricao" class="form-control" />
+                <ValidationMessage For="@(() => novaNota.Descricao)" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private Nota novaNota = new Nota();
+
+    [Parameter]
+    public EventCallback<Nota> OnNotaAdicionada { get; set; }
+
+    private async Task SalvarNota()
+    {
+        novaNota.DataHoraEscrito = DateTime.Now; // Definir automaticamente como DateTime.Now
+
+        await OnNotaAdicionada.InvokeAsync(novaNota);
+        novaNota = new Nota(); // Limpar o modelo para adicionar nova nota
+    }
+}
